@@ -31,6 +31,7 @@ export default function Header() {
           <Link href="/cart">Cart ({count})</Link>
           {user ? (
             <>
+              <Link href="/orders">My orders</Link>
               <span className="text-sm text-gray-500">{user.email}</span>
               <button
                 onClick={handleLogout}
