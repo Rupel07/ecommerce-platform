@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { useCart } from "@/components/CartProvider";
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
-
+  const { count } = useCart();
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -27,6 +28,7 @@ export default function Header() {
           My Store
         </Link>
         <div className="flex items-center gap-4">
+          <Link href="/cart">Cart ({count})</Link>
           {user ? (
             <>
               <span className="text-sm text-gray-500">{user.email}</span>

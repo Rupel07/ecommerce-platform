@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabasePublic } from "@/lib/supabase-public";
+import AddToCartButton from "@/components/AddToCartButton";
 
 export default async function ProductPage({
   params,
@@ -45,6 +46,14 @@ export default async function ProductPage({
           <p className="mt-4 text-sm">
             {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
           </p>
+          <AddToCartButton
+            productId={product.id}
+            slug={slug}
+            name={product.name}
+            price={Number(product.price)}
+            imageUrl={product.image_url}
+            stock={product.stock}
+          />
         </div>
       </div>
     </main>
