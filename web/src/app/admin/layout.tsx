@@ -53,6 +53,7 @@ export default function AdminLayout({
           Dashboard
         </Link>
         <Link href="/admin/products">Products</Link>
+        <Link href="/admin/orders">Orders</Link>
       </nav>
       {children}
     </div>
