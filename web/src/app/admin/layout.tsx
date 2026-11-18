@@ -53,7 +53,10 @@ export default function AdminLayout({
           Dashboard
         </Link>
         <Link href="/admin/products">Products</Link>
+        <Link href="/admin/categories">Categories</Link>
         <Link href="/admin/orders">Orders</Link>
+        <Link href="/admin/customers">Customers</Link>
+        <Link href="/admin/reports">Reports</Link>
       </nav>
       {children}
     </div>
