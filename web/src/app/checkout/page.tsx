@@ -65,7 +65,10 @@ export default function CheckoutPage() {
             shortly.
           </p>
         )}
-        <Link href="/" className="mt-6 inline-block underline">
+        <Link href="/orders" className="mt-6 mr-4 inline-block underline">
+          View my orders
+        </Link>
+        <Link href="/" className="inline-block underline">
           Continue shopping
         </Link>
       </main>
