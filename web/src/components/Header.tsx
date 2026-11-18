@@ -8,11 +8,27 @@ import { useCart } from "@/components/CartProvider";
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { count } = useCart();
+
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    function update(u: User | null) {
+      setUser(u);
+      if (!u) {
+        setIsAdmin(false);
+        return;
+      }
+      supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", u.id)
+        .single()
+        .then(({ data }) => setIsAdmin(data?.role === "admin"));
+    }
+
+    supabase.auth.getUser().then(({ data }) => update(data.user));
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      update(session?.user ?? null);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -31,6 +47,7 @@ export default function Header() {
           <Link href="/cart">Cart ({count})</Link>
           {user ? (
             <>
+              {isAdmin && <Link href="/admin">Admin</Link>}
               <Link href="/orders">My orders</Link>
               <span className="text-sm text-gray-500">{user.email}</span>
               <button
