@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { supabasePublic } from "@/lib/supabase-public";
 import AddToCartButton from "@/components/AddToCartButton";
 import WishlistButton from "@/components/WishlistButton";
+import Reviews from "@/components/Reviews";
 
 export default async function ProductPage({
   params,
@@ -58,6 +59,7 @@ export default async function ProductPage({
           <WishlistButton productId={product.id} />
         </div>
       </div>
+      <Reviews productId={product.id} />
     </main>
   );
 }
