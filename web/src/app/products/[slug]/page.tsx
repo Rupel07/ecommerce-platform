@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabasePublic } from "@/lib/supabase-public";
 import AddToCartButton from "@/components/AddToCartButton";
+import WishlistButton from "@/components/WishlistButton";
 
 export default async function ProductPage({
   params,
@@ -54,6 +55,7 @@ export default async function ProductPage({
             imageUrl={product.image_url}
             stock={product.stock}
           />
+          <WishlistButton productId={product.id} />
         </div>
       </div>
     </main>
