@@ -44,6 +44,7 @@ export default function Header() {
           My Store
         </Link>
         <div className="flex items-center gap-4">
+          <Link href="/contact">Contact</Link>
           <Link href="/cart">Cart ({count})</Link>
           {user ? (
             <>
