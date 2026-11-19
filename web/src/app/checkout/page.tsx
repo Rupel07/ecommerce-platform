@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { useCart } from "@/components/CartProvider";
+import { storeConfig } from "@/lib/store-config";
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart();
@@ -17,6 +18,7 @@ export default function CheckoutPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<number | null>(null);
+  const [paidTotal, setPaidTotal] = useState(0);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -48,6 +50,8 @@ export default function CheckoutPage() {
       return;
     }
 
+    setPaidTotal(total);
+
     clearCart();
     setOrderId(data as number);
   }
@@ -60,9 +64,31 @@ export default function CheckoutPage() {
           Your order <strong>#{orderId}</strong> has been placed.
         </p>
         {payment === "bank_transfer" && (
+          <div className="mt-4 rounded border p-4 text-gray-300">
+            <p className="mb-2 font-semibold text-white">
+              Pay by bank transfer
+            </p>
+            <p>Bank: {storeConfig.bank.bankName}</p>
+            <p>Account name: {storeConfig.bank.accountName}</p>
+            <p>Account number: {storeConfig.bank.accountNumber}</p>
+            <p>Amount: ${paidTotal.toFixed(2)}</p>
+            <p>Reference: Order #{orderId}</p>
+            <p className="mt-2 text-sm">
+              Use your internet or mobile banking app. Please put the order
+              number as the payment reference. We will confirm your order once
+              the payment arrives.
+            </p>
+          </div>
+        )}
+        {payment === "card" && (
           <p className="mt-4 text-gray-300">
-            You chose bank transfer. We will email you the payment details
-            shortly.
+            Your order is awaiting card payment. We will contact you shortly
+            with a secure way to pay by card.
+          </p>
+        )}
+        {payment === "cash_on_delivery" && (
+          <p className="mt-4 text-gray-300">
+            Please have the cash ready when your order is delivered.
           </p>
         )}
         <Link href="/orders" className="mt-6 mr-4 inline-block underline">
@@ -166,8 +192,20 @@ export default function CheckoutPage() {
               checked={payment === "bank_transfer"}
               onChange={(e) => setPayment(e.target.value)}
             />
-            Bank transfer
+            Bank transfer (internet or mobile banking)
           </label>
+          {storeConfig.cardPaymentsEnabled && (
+            <label className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="payment"
+                value="card"
+                checked={payment === "card"}
+                onChange={(e) => setPayment(e.target.value)}
+              />
+              Card payment
+            </label>
+          )}
           <label className="flex items-center gap-2">
             <input
               type="radio"
@@ -176,7 +214,7 @@ export default function CheckoutPage() {
               checked={payment === "cash_on_delivery"}
               onChange={(e) => setPayment(e.target.value)}
             />
-            Pay on delivery
+            Cash on delivery
           </label>
         </fieldset>
 
