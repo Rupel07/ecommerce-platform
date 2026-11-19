@@ -48,6 +48,7 @@ export default function Header() {
           {user ? (
             <>
               {isAdmin && <Link href="/admin">Admin</Link>}
+              <Link href="/wishlist">Wishlist</Link>
               <Link href="/orders">My orders</Link>
               <span className="text-sm text-gray-500">{user.email}</span>
               <button
