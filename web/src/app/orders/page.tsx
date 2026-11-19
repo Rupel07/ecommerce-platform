@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { storeConfig } from "@/lib/store-config";
 
 type OrderItem = {
   quantity: number;
@@ -127,20 +128,22 @@ export default function OrdersPage() {
                 </span>
               </div>
 
-              {!cancelled && (
-                <div className="my-4 flex gap-1">
-                  {STEPS.map((step, i) => (
-                    <div key={step} className="flex-1">
-                      <div
-                        className={`h-1 rounded ${i <= stepIndex ? "bg-white" : "bg-gray-700"}`}
-                      />
-                      <p className="mt-1 text-xs text-gray-400">
-                        {STATUS_LABELS[step]}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {order.payment_method === "bank_transfer" &&
+                order.payment_status === "unpaid" &&
+                !cancelled && (
+                  <div className="my-4 flex gap-1">
+                    {STEPS.map((step, i) => (
+                      <div key={step} className="flex-1">
+                        <div
+                          className={`h-1 rounded ${i <= stepIndex ? "bg-white" : "bg-gray-700"}`}
+                        />
+                        <p className="mt-1 text-xs text-gray-400">
+                          {STATUS_LABELS[step]}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
               <div className="mt-3 border-t pt-3">
                 {order.order_items.map((item, i) => (
